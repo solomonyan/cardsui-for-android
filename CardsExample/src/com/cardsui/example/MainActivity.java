@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -58,6 +59,8 @@ public class MainActivity extends Activity {
 
 		mCardView.addCardToLastStack(androidViewsCard);
 
+        // Google Play Cards
+
 		CardStack stackPlay = new CardStack();
 		stackPlay.setTitle("GOOGLE PLAY CARDS");
 		mCardView.addStack(stackPlay);
@@ -89,8 +92,18 @@ public class MainActivity extends Activity {
 						"You can easily implement an onClickListener on any card, but the last boolean parameter of the PlayCards allow you to toggle the clickable background.",
 						"#4ac925", "#222222", true, true));
 
-		// draw cards
-		mCardView.refresh();
+        // Image Card
+
+        CardStack stackImage = new CardStack();
+        stackImage.setTitle("IMAGE CARDS");
+        mCardView.addStack(stackImage);
+
+        mCardView.addCard(new MyImageCard("Image 1", R.drawable.url1));
+        mCardView.addCardToLastStack(new MyImageCard("Image 2", R.drawable.url2));
+        mCardView.addCardToLastStack(new MyImageCard("Image 3", R.drawable.url3));
+
+        // draw cards
+        mCardView.refresh();
 	}
 
 	@Override
@@ -98,4 +111,11 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default: mCardView.refresh();
+                return true;
+        }
+    }
 }
