@@ -23,11 +23,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends Activity {
 
-	private CardUI mCardView;
-    ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
+    private CardUI mCardView;
+    ArrayList<HashMap<String, String>> newslist = new ArrayList<HashMap<String, String>>();
     //URL to get JSON Array
     private static String url = "http://data-hk.com/English/SCMP_News.json";
     //JSON Node Names
@@ -35,98 +36,147 @@ public class MainActivity extends Activity {
     private static final String TAG_MARK = "Mark";
     private static final String TAG_TOPIC = "Topic";
     private static final String TAG_URL = "Url";
+    private static final String TAG_PUBLISED_ON = "Publised_on";
+    private static final String TAG_LAST_UPDATE = "Last_update";
     JSONArray android = null;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
 
-		// init CardView
-		mCardView = (CardUI) findViewById(R.id.cardsview);
-		mCardView.setSwipeable(true);
+        // init CardView
+        mCardView = (CardUI) findViewById(R.id.cardsview);
+        mCardView.setSwipeable(true);
 
-		CardStack stack2 = new CardStack();
-		stack2.setTitle("REGULAR CARDS");
-		mCardView.addStack(stack2);
+//		CardStack stack2 = new CardStack();
+//		stack2.setTitle("REGULAR CARDS");
+//		mCardView.addStack(stack2);
 
-		// add AndroidViews Cards
-		mCardView.addCard(new MyCard("Get the CardsUI view"));
-		mCardView.addCardToLastStack(new MyCard("for Android at"));
-		MyCard androidViewsCard = new MyCard("www.androidviews.net");
-		androidViewsCard.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("http://www.androidviews.net/"));
-				startActivity(intent);
-
-			}
-		});
-		androidViewsCard.setOnLongClickListener(new OnLongClickListener() {    		
-    		
-			@Override
-			public boolean onLongClick(View v) {
-				Toast.makeText(v.getContext(), "This is a long click", Toast.LENGTH_SHORT).show();
-				return true;
-			}
-		
-		});
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse("http://www.androidviews.net/"));
-
-		mCardView.addCardToLastStack(androidViewsCard);
+//		// add AndroidViews Cards
+//		mCardView.addCard(new MyCard("Get the CardsUI view"));
+//		mCardView.addCardToLastStack(new MyCard("for Android at"));
+//		MyCard androidViewsCard = new MyCard("www.androidviews.net");
+//		androidViewsCard.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(Intent.ACTION_VIEW);
+//				intent.setData(Uri.parse("http://www.androidviews.net/"));
+//				startActivity(intent);
+//
+//			}
+//		});
+//		androidViewsCard.setOnLongClickListener(new OnLongClickListener() {
+//
+//			@Override
+//			public boolean onLongClick(View v) {
+//				Toast.makeText(v.getContext(), "This is a long click", Toast.LENGTH_SHORT).show();
+//				return true;
+//			}
+//
+//		});
+//		Intent intent = new Intent(Intent.ACTION_VIEW);
+//		intent.setData(Uri.parse("http://www.androidviews.net/"));
+//
+//		mCardView.addCardToLastStack(androidViewsCard);
 
         // Google Play Cards
 
-		CardStack stackPlay = new CardStack();
-		stackPlay.setTitle("GOOGLE PLAY CARDS");
-		mCardView.addStack(stackPlay);
-
-		// add one card, and then add another one to the last stack.
-		mCardView.addCard(new MyCard("Google Play Cards"));
-		mCardView.addCardToLastStack(new MyCard("By Androguide & GadgetCheck"));
-
-		mCardView.addCardToLastStack(new MyPlayCard("Google Play",
-				"This card mimics the new Google play cards look", "#33b6ea",
-				"#33b6ea", true, false));
-
-		mCardView
-				.addCardToLastStack(new MyPlayCard(
-						"Menu Overflow",
-						"The PlayCards allow you to easily set a menu overflow on your card.\nYou can also declare the left stripe's color in a String, like \"#33B5E5\" for the holo blue color, same for the title color.",
-						"#e00707", "#e00707", false, true));
-
-		// add one card
-		mCardView
-				.addCard(new MyPlayCard(
-						"Different Colors for Title & Stripe",
-						"You can set any color for the title and any other color for the left stripe",
-						"#f2a400", "#9d36d0", false, false));
-
-		mCardView
-				.addCardToLastStack(new MyPlayCard(
-						"Set Clickable or Not",
-						"You can easily implement an onClickListener on any card, but the last boolean parameter of the PlayCards allow you to toggle the clickable background.",
-						"#4ac925", "#222222", true, true));
+//		CardStack stackPlay = new CardStack();
+//		stackPlay.setTitle("GOOGLE PLAY CARDS");
+//		mCardView.addStack(stackPlay);
+//
+//		// add one card, and then add another one to the last stack.
+//		mCardView.addCard(new MyCard("Google Play Cards"));
+//		mCardView.addCardToLastStack(new MyCard("By Androguide & GadgetCheck"));
+//
+//		mCardView.addCardToLastStack(new MyPlayCard("Google Play",
+//				"This card mimics the new Google play cards look", "#33b6ea",
+//				"#33b6ea", true, false));
+//
+//		mCardView
+//				.addCardToLastStack(new MyPlayCard(
+//						"Menu Overflow",
+//						"The PlayCards allow you to easily set a menu overflow on your card.\nYou can also declare the left stripe's color in a String, like \"#33B5E5\" for the holo blue color, same for the title color.",
+//						"#e00707", "#e00707", false, true));
+//
+//		// add one card
+//		mCardView
+//				.addCard(new MyPlayCard(
+//						"Different Colors for Title & Stripe",
+//						"You can set any color for the title and any other color for the left stripe",
+//						"#f2a400", "#9d36d0", false, false));
+//
+//		mCardView
+//				.addCardToLastStack(new MyPlayCard(
+//						"Set Clickable or Not",
+//						"You can easily implement an onClickListener on any card, but the last boolean parameter of the PlayCards allow you to toggle the clickable background.",
+//						"#4ac925", "#222222", true, true));
 
         // Image Card
 
-        CardStack stackImage = new CardStack();
-        stackImage.setTitle("IMAGE CARDS");
-        mCardView.addStack(stackImage);
-
-        mCardView.addCard(new MyImageCard("Image 1", R.drawable.url1));
-        mCardView.addCardToLastStack(new MyImageCard("Image 2", R.drawable.url2));
-        mCardView.addCardToLastStack(new MyImageCard("Image 3", R.drawable.url3));
+//        CardStack stackImage = new CardStack();
+//        stackImage.setTitle("IMAGE CARDS");
+//        mCardView.addStack(stackImage);
+//
+//        mCardView.addCard(new MyImageCard("Image 1", R.drawable.url1));
+//        mCardView.addCardToLastStack(new MyImageCard("Image 2", R.drawable.url2));
+//        mCardView.addCardToLastStack(new MyImageCard("Image 3", R.drawable.url3));
 
         // draw cards
-        mCardView.refresh();
+//        mCardView.refresh();
 
         new JSONParse().execute();
-	}
+//        showNewsCards();
+    }
+
+    private void showNewsCards(ArrayList<HashMap<String, String>> newslist) {
+        // Google Play Cards
+        String[] color = {"#e00707","#33b6ea","#f2a400","#4ac925"};
+        int i = 0;
+        CardStack stackPlay = new CardStack();
+        stackPlay.setTitle("NEWS CARDS");
+        mCardView.addStack(stackPlay);
+        for (HashMap<String, String> news_map : newslist) {
+            mCardView.addCardToLastStack(new MyPlayCard(
+                            news_map.get(TAG_TOPIC),
+                            news_map.get(TAG_URL),
+                            color[i], color[i], false, true));
+            i++;
+        }
+
+
+        // add one card, and then add another one to the last stack.
+//        mCardView.addCard(new MyCard("Google Play Cards"));
+//        mCardView.addCardToLastStack(new MyCard("By Androguide & GadgetCheck"));
+
+//        mCardView.addCardToLastStack(new MyPlayCard("Google Play",
+//                "This card mimics the new Google play cards look", "#33b6ea",
+//                "#33b6ea", true, false));
+
+//        mCardView
+//                .addCardToLastStack(new MyPlayCard(
+//                        "Menu Overflow",
+//                        "The PlayCards allow you to easily set a menu overflow on your card.\nYou can also declare the left stripe's color in a String, like \"#33B5E5\" for the holo blue color, same for the title color.",
+//                        "#e00707", "#e00707", false, true));
+//
+//        // add one card
+//        mCardView
+//                .addCard(new MyPlayCard(
+//                        "Different Colors for Title & Stripe",
+//                        "You can set any color for the title and any other color for the left stripe",
+//                        "#f2a400", "#9d36d0", false, false));
+//
+//        mCardView
+//                .addCardToLastStack(new MyPlayCard(
+//                        "Set Clickable or Not",
+//                        "You can easily implement an onClickListener on any card, but the last boolean parameter of the PlayCards allow you to toggle the clickable background.",
+//                        "#4ac925", "#222222", true, true));
+
+        mCardView.refresh();
+    }
 
     private class JSONParse extends AsyncTask<String, String, JSONObject> {
         @Override
@@ -136,61 +186,46 @@ public class MainActivity extends Activity {
             JSONObject json = jParser.getJSONFromUrl(url);
             return json;
         }
+
         @Override
         protected void onPostExecute(JSONObject json) {
             try {
                 // Getting JSON Array from URL
                 android = json.getJSONArray(TAG_NEWS);
-                for(int i = 0; i < android.length(); i++){
+                for (int i = 0; i < android.length(); i++) {
                     JSONObject c = android.getJSONObject(i);
                     // Storing  JSON item in a Variable
                     String mark = c.getString(TAG_MARK);
                     String topic = c.getString(TAG_TOPIC);
                     String url = c.getString(TAG_URL);
+                    String publised_on = c.getString(TAG_PUBLISED_ON);
+                    String last_update = c.getString(TAG_LAST_UPDATE);
                     // Adding value HashMap key => value
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put(TAG_MARK, mark);
                     map.put(TAG_TOPIC, topic);
                     map.put(TAG_URL, url);
-                    oslist.add(map);
-                    for (HashMap<String, String> news_map: oslist){
-                        Iterator iterator = news_map.keySet().iterator();
-
-                        while (iterator.hasNext()) {
-                            String key = iterator.next().toString();
-                            String value = map.get(key).toString();
-                            System.out.println(key + " " + value);
-                        }
-                    }
-//                    list=(ListView)findViewById(R.id.list);
-//                    ListAdapter adapter = new SimpleAdapter(MainActivity.this, oslist,
-//                            R.layout.list_v,
-//                            new String[] { TAG_VER,TAG_NAME, TAG_API }, new int[] {
-//                            R.id.vers,R.id.name, R.id.api});
-//                    list.setAdapter(adapter);
-//                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view,
-//                                                int position, long id) {
-//                            Toast.makeText(MainActivity.this, "You Clicked at "+oslist.get(+position).get("name"), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+                    map.put(TAG_PUBLISED_ON, publised_on);
+                    map.put(TAG_LAST_UPDATE, last_update);
+                    newslist.add(map);
                 }
+                showNewsCards(newslist);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            default: mCardView.refresh();
+            default:
+                mCardView.refresh();
                 return true;
         }
     }
