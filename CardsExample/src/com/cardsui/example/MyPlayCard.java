@@ -10,10 +10,14 @@ import com.fima.cardsui.objects.RecyclableCard;
 
 public class MyPlayCard extends RecyclableCard {
 
-	public MyPlayCard(String titlePlay, String description, String color,
+    private String details;
+    private String hot;
+	public MyPlayCard(String titlePlay, String description,String details,String hot, String color,
 			String titleColor, Boolean hasOverflow, Boolean isClickable) {
 		super(titlePlay, description, color, titleColor, hasOverflow,
 				isClickable);
+        this.details = details;
+        this.hot = hot;
 	}
 
 	@Override
@@ -28,6 +32,10 @@ public class MyPlayCard extends RecyclableCard {
 				.parseColor(titleColor));
 		((TextView) convertView.findViewById(R.id.description))
 				.setText(description);
+        ((TextView) convertView.findViewById(R.id.details))
+                .setText(details);
+        ((TextView) convertView.findViewById(R.id.hot))
+                .setText(hot);
 		((ImageView) convertView.findViewById(R.id.stripe))
 				.setBackgroundColor(Color.parseColor(color));
 
