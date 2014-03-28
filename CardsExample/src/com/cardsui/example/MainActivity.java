@@ -1,8 +1,10 @@
 package com.cardsui.example;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,14 +16,32 @@ import android.widget.Toast;
 import com.fima.cardsui.objects.CardStack;
 import com.fima.cardsui.views.CardUI;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
 public class MainActivity extends Activity {
 
 	private CardUI mCardView;
+    ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
+    //URL to get JSON Array
+    private static String url = "http://data-hk.com/English/SCMP_News.json";
+    //JSON Node Names
+    private static final String TAG_NEWS = "News";
+    private static final String TAG_MARK = "Mark";
+    private static final String TAG_TOPIC = "Topic";
+    private static final String TAG_URL = "Url";
+    JSONArray android = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 
 		// init CardView
 		mCardView = (CardUI) findViewById(R.id.cardsview);
@@ -104,7 +124,63 @@ public class MainActivity extends Activity {
 
         // draw cards
         mCardView.refresh();
+
+        new JSONParse().execute();
 	}
+
+    private class JSONParse extends AsyncTask<String, String, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(String... args) {
+            JSONParser jParser = new JSONParser();
+            // Getting JSON from URL
+            JSONObject json = jParser.getJSONFromUrl(url);
+            return json;
+        }
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            try {
+                // Getting JSON Array from URL
+                android = json.getJSONArray(TAG_NEWS);
+                for(int i = 0; i < android.length(); i++){
+                    JSONObject c = android.getJSONObject(i);
+                    // Storing  JSON item in a Variable
+                    String mark = c.getString(TAG_MARK);
+                    String topic = c.getString(TAG_TOPIC);
+                    String url = c.getString(TAG_URL);
+                    // Adding value HashMap key => value
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put(TAG_MARK, mark);
+                    map.put(TAG_TOPIC, topic);
+                    map.put(TAG_URL, url);
+                    oslist.add(map);
+                    for (HashMap<String, String> news_map: oslist){
+                        Iterator iterator = news_map.keySet().iterator();
+
+                        while (iterator.hasNext()) {
+                            String key = iterator.next().toString();
+                            String value = map.get(key).toString();
+                            System.out.println(key + " " + value);
+                        }
+                    }
+//                    list=(ListView)findViewById(R.id.list);
+//                    ListAdapter adapter = new SimpleAdapter(MainActivity.this, oslist,
+//                            R.layout.list_v,
+//                            new String[] { TAG_VER,TAG_NAME, TAG_API }, new int[] {
+//                            R.id.vers,R.id.name, R.id.api});
+//                    list.setAdapter(adapter);
+//                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view,
+//                                                int position, long id) {
+//                            Toast.makeText(MainActivity.this, "You Clicked at "+oslist.get(+position).get("name"), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
