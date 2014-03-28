@@ -22,8 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class MainActivity extends Activity {
 
@@ -131,7 +129,7 @@ public class MainActivity extends Activity {
         new JSONParse().execute();
 //        showNewsCards();
     }
-
+    public static String urlforClick;
     private void showNewsCards(ArrayList<HashMap<String, String>> newslist) {
         // Google Play Cards
         String[] color = {"#e00707","#33b6ea","#f2a400","#4ac925"};
@@ -140,40 +138,24 @@ public class MainActivity extends Activity {
         stackPlay.setTitle("NEWS CARDS");
         mCardView.addStack(stackPlay);
         for (HashMap<String, String> news_map : newslist) {
-            mCardView.addCardToLastStack(new MyPlayCard(
-                            news_map.get(TAG_TOPIC),
-                            news_map.get(TAG_URL),
-                            color[i], color[i], false, true));
+            urlforClick = news_map.get(TAG_URL);
+            MyPlayCard cardUrl =  new MyPlayCard(
+                    news_map.get(TAG_TOPIC),
+                    "Mark: " + news_map.get(TAG_MARK) + " Published on " + news_map.get(TAG_PUBLISED_ON),
+                    color[i], color[i], false, true);
+
+            cardUrl.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(urlforClick));
+                    startActivity(intent);
+                }
+            });
+            mCardView.addCardToLastStack(cardUrl);
             i++;
         }
 
-
-        // add one card, and then add another one to the last stack.
-//        mCardView.addCard(new MyCard("Google Play Cards"));
-//        mCardView.addCardToLastStack(new MyCard("By Androguide & GadgetCheck"));
-
-//        mCardView.addCardToLastStack(new MyPlayCard("Google Play",
-//                "This card mimics the new Google play cards look", "#33b6ea",
-//                "#33b6ea", true, false));
-
-//        mCardView
-//                .addCardToLastStack(new MyPlayCard(
-//                        "Menu Overflow",
-//                        "The PlayCards allow you to easily set a menu overflow on your card.\nYou can also declare the left stripe's color in a String, like \"#33B5E5\" for the holo blue color, same for the title color.",
-//                        "#e00707", "#e00707", false, true));
-//
-//        // add one card
-//        mCardView
-//                .addCard(new MyPlayCard(
-//                        "Different Colors for Title & Stripe",
-//                        "You can set any color for the title and any other color for the left stripe",
-//                        "#f2a400", "#9d36d0", false, false));
-//
-//        mCardView
-//                .addCardToLastStack(new MyPlayCard(
-//                        "Set Clickable or Not",
-//                        "You can easily implement an onClickListener on any card, but the last boolean parameter of the PlayCards allow you to toggle the clickable background.",
-//                        "#4ac925", "#222222", true, true));
 
         mCardView.refresh();
     }

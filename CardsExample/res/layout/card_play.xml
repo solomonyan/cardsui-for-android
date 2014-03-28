@@ -2,14 +2,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="6dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:weightSum="100" >
+        android:weightSum="100"
+        android:longClickable="false">
 
         <ImageView
             android:id="@+id/stripe"
